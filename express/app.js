@@ -6,32 +6,22 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-/*app.use('/',(req,res,next) =>{
-    //console.log("1st Middle Ware");
-    next();
-});*/
+const adminRouter = require('./routes/admin.js');
+
+const shopRouter = require('./routes/shop.js');
+
+
 
 app.use(bodyParser.urlencoded({extended : false}));
 
-app.use('/add-product',(req,res,next) => {
-    res.send(`
-    <form action="/product" method="POST">
-    <input type="text" name="title">
-    <input type="number" name="size">
-    <button type="submit" >Add Product</button>
-    </form>
-    `);
-});
+app.use('/admin',adminRouter);
 
-app.post('/product',(req,res,next) => {
-    console.log(req.body);
-    res.redirect('/');
-});
+app.use('/shop',shopRouter);
 
+app.use((req,res,next) => {
+    res.status(404).send('<h1>Error  Page Not Found</h1>');
+})
 
-app.use('/',(req,res,next) => {
-    res.send(`<h1>Hello , Welcome</h1>`);
-});
 
 app.listen(2100);
 
